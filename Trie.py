@@ -11,14 +11,6 @@ class Arvore():
     palavras = []
     new_palavra = ""
 
-    # def AtualizarFolhas(self, no=referencia):
-    #     if(len(no.filhos) != 0):
-    #         for key in no.filhos:
-    #             no = no.filhos[key]
-    #             self.AtualizarFolhas(no)
-    #     else:
-    #         no.folha = 1
-
     def PalavraToList(self, palavra):
         letrasPalavra = []
         for character in palavra:
@@ -33,7 +25,6 @@ class Arvore():
             else:
                 no.filhos[char] = No(char)
                 no = no.filhos[char]
-        # self.AtualizarFolhas()
 
     def __str__(self, no=referencia):
         
@@ -58,8 +49,6 @@ tree.Insert("League")
 
 print(tree)
 tree.Insert("Of")
-
-# print(vars(tree))
 
 print(tree)
 tree.Insert("Legends")
