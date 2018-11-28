@@ -1,69 +1,74 @@
+from collections import OrderedDict
+from copy import deepcopy
+alfabeto = "a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z".split(",")
+defaultdict = OrderedDict() 
+
+for letter in alfabeto:
+		defaultdict[letter] = None
+		
 class No():
 
-    def __init__(self, char=None):
-        self.char = char
-        self.filhos = {}
-        self.folha = 0
+	def __init__(self, char=None):
+		self.char = char
+		self.filhos = deepcopy(defaultdict)
+		self.folha = False
 
+	def print(self, palavra):
+		if (self.folha == True):
+				print(palavra)
+		for letter in alfabeto:
+				if (self.filhos[letter] is not None):
+						self.filhos[letter].print(deepcopy(palavra+letter))		
 class Arvore():
-    referencia = No(); 
-    palavras = []
-    new_palavra = ""
+	referencia = No(); 
+	palavras = []
+	def Insert(self, palavra, no=referencia):
+		palavra = palavra.lower()
+		listedPalavra = list(palavra)
+		contador = 0
+		for char in listedPalavra:
+			contador+= 1
+			if(no.filhos[char] is not None):
+				no = no.filhos[char]
+			else:
+				no.filhos[char] = No(char)
+				no = no.filhos[char]
+			if (contador == len(listedPalavra)):
+				no.folha = True
+	def print(self):
+		self.referencia.print("")
 
-    def PalavraToList(self, palavra):
-        letrasPalavra = []
-        for character in palavra:
-            letrasPalavra.append(character)
-        return letrasPalavra
+	def busca(self, palavra, no=referencia):
+		palavra = palavra.lower()
+		listedPalavra = list(palavra)
+		retorno = ""
+		contador = 0
+		last_char_folha = False
+		for char in listedPalavra:
+			contador += 1
+			if(contador <= len(listedPalavra)):
+				if(no.filhos[char] is not None):
+					no = no.filhos[char]
+					retorno = retorno + str(no.char)
+				else:
+					retorno = ""
+					print("Palavra não encontrada")
+					break
+			last_char_folha = no.folha
+		if(last_char_folha == True):
+			print("A seguinte palavra foi encontrada: ")
+			return retorno
+		else:
+			print("A palavra não foi encontrada")
+			retorno = ""
+			return retorno
+		
+tree = Arvore()
+tree.Insert("Cavalo")
+tree.Insert("Abelha")
+tree.Insert("Abeliano")
+tree.Insert("Cava")
 
-    def Insert(self, palavra, no=referencia):
-        listedPalavra = self.PalavraToList(palavra)
-        for char in listedPalavra:
-            if(char in no.filhos):
-                no = no.filhos[char]
-            else:
-                no.filhos[char] = No(char)
-                no = no.filhos[char]
+tree.print()				
 
-    def __str__(self, no=referencia):
-        
-        # try 1
-        if(len(no.filhos) != 0):
-            for chave in no.filhos:    
-                self.new_palavra = self.new_palavra + str(chave) 
-                no = no.filhos[chave]
-                self.__str__(no)
-        else:
-            self.palavras.append(self.new_palavra)
-            self.new_palavra = ""
-            no = self.referencia
-        
-        # try 2
-        # if(len(no.filhos) > 0):
-        #     for chave in no.filhos:
-        #         self.new_palavra = self.new_palavra + str(chave)
-        #         if(len(no.filhos) > 0):
-        #             no = no.filhos[chave]
-        #             self.__str__(no)
-        #         else:
-        #             self.palavras.append(self.new_palavra)
-        #             self.new_palavra = ""
-
-        for word in self.palavras:
-            return word
-
-
-
-tree = Arvore();
-
-tree.Insert("League")
-
-print(tree)
-tree.Insert("Of")
-
-print(tree)
-tree.Insert("Legends")
-
-
-# verify = tree.referencia.filhos['L'].filhos['e']
-# print(verify.filhos)
+print(tree.busca("Abel"))
