@@ -19,9 +19,26 @@ class No():
 		for letter in alfabeto:
 				if (self.filhos[letter] is not None):
 						self.filhos[letter].print(deepcopy(palavra+letter))		
+	def delete(self):
+		self.char = None
+		self.filhos = None
+		self.folha = None
+
 class Arvore():
 	referencia = No(); 
-	palavras = []
+
+	def filho_nao_unico(self, no):
+		contador = 0
+		for char in defaultdict:
+			if no.filhos[char] != None:
+				contador += 1
+		if contador > 1:
+			return 1
+		elif contador == 1:
+			return 0
+		else:
+			return -1
+
 	def Insert(self, palavra, no=referencia):
 		palavra = palavra.lower()
 		listedPalavra = list(palavra)
@@ -62,7 +79,49 @@ class Arvore():
 			print("A palavra não foi encontrada")
 			retorno = ""
 			return retorno
+
+	def delete_palavra_interna(self, palavra, no=referencia):
+		contador = 0
+		palavra = palavra.lower()
+		listedPalavra = list(palavra)
+		for char in listedPalavra:
+			contador += 1
+			if(contador == len(listedPalavra)):
+				no.filhos[char].folha = False
+			elif(no.filhos[char] is not None):
+				no = no.filhos[char] 
+			
+	def delete(self, palavra, no=referencia):
+		palavra = palavra.lower()
+		listedPalavra = list(palavra)
+		impedidor = -1
+		contador = 0
+		contador_comparador = 0
+		ate_o_fim = 0
+		for char in listedPalavra[:-1]:
+			contador += 1
+			if(self.filho_nao_unico(no) == 1 or no.folha == True):
+				impedidor = contador
+			if(no.filhos[char] is not None):
+				no = no.filhos[char]
 		
+		if(self.filho_nao_unico((no.filhos[listedPalavra[-1]])) >= 0):
+			ate_o_fim = 0
+		else:
+			ate_o_fim = 1
+
+		no = self.referencia
+		
+		for char in listedPalavra:
+			contador_comparador += 1
+			if(contador_comparador == impedidor and no.filhos[char] is not None):
+				if(ate_o_fim == 1):
+					no.filhos[char] = None
+				else:
+					self.delete_palavra_interna(palavra)
+			elif(no.filhos[char] is not None): 
+				no = no.filhos[char]
+
 tree = Arvore()
 tree.Insert("Cavalo")
 tree.Insert("Abelha")
@@ -70,5 +129,8 @@ tree.Insert("Abeliano")
 tree.Insert("Cava")
 
 tree.print()				
-
-print(tree.busca("Abel"))
+print(" ")
+print(tree.busca("Abeliano"))
+tree.delete("abeliano")
+print(" ")
+tree.print()
