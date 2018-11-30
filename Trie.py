@@ -98,14 +98,14 @@ class Arvore():
 		contador = 0
 		contador_comparador = 0
 		ate_o_fim = 0
-		for char in listedPalavra[:-1]:
+		for char in listedPalavra:
 			contador += 1
 			if(self.filho_nao_unico(no) == 1 or no.folha == True):
 				impedidor = contador
 			if(no.filhos[char] is not None):
 				no = no.filhos[char]
 		
-		if(self.filho_nao_unico((no.filhos[listedPalavra[-1]])) >= 0):
+		if(self.filho_nao_unico(no) >= 0):
 			ate_o_fim = 0
 		else:
 			ate_o_fim = 1
@@ -121,16 +121,18 @@ class Arvore():
 					self.delete_palavra_interna(palavra)
 			elif(no.filhos[char] is not None): 
 				no = no.filhos[char]
+			print(impedidor)
 
 tree = Arvore()
 tree.Insert("Cavalo")
 tree.Insert("Abelha")
 tree.Insert("Abeliano")
 tree.Insert("Cava")
+tree.Insert("Cavala")
 
 tree.print()				
 print(" ")
 print(tree.busca("Abeliano"))
-tree.delete("abeliano")
+tree.delete("cavalo")
 print(" ")
 tree.print()
